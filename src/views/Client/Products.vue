@@ -100,7 +100,6 @@ export default {
       customer
         .getProducts(page)
         .then((res) => {
-          console.log(res.data);
           const { products, pagination } = res.data;
           this.products = products;
           this.pagination = pagination;

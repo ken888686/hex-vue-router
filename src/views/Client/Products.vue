@@ -40,13 +40,8 @@
               <button
                 type="button"
                 class="btn btn-outline-secondary"
-                :disabled="isLoading && loadingItemId === item.id"
-                @click="showProductInfoModal(item.id)"
+                @click="showProductModal(item.id)"
               >
-                <i
-                  v-if="isLoading && loadingItemId === item.id"
-                  class="fas fa-spinner fa-pulse"
-                />
                 查看更多
               </button>
               <button
@@ -66,20 +61,41 @@
         </tr>
       </tbody>
     </table>
-    <Pagination
-      :prop-pagination="pagination"
-      @set-current-page="getProducts"
+    <div class="text-center">
+      <Pagination
+        :prop-pagination="pagination"
+        @set-current-page="getProducts"
+      />
+    </div>
+    <ProductModal
+      ref="productModal"
+      :prop-product="product"
+      @add-product="addProduct"
+    />
+    <NotifyModal
+      ref="notifyModal"
+      :prop-title="title"
+      :prop-success="success"
+      :prop-msg="message"
     />
   </div>
 </template>
 <script>
+import { Modal } from 'bootstrap';
 import { customer } from '@/service';
 import Pagination from '@/components/Pagination.vue';
+import ProductModal from '@/components/ProductModal.vue';
+import NotifyModal from '@/components/NotifyModal.vue';
 
 export default {
-  components: { Pagination },
+  components: {
+    Pagination,
+    ProductModal,
+    NotifyModal,
+  },
   data() {
     return {
+      product: {},
       products: [],
       isLoading: false,
       loadingItemId: '',
@@ -89,10 +105,20 @@ export default {
         has_pre: false,
         total_pages: 1,
       },
+      productModal: null,
+      notifyModal: null,
+      success: false,
+      message: '',
+      title: '',
     };
   },
   mounted() {
     this.getProducts();
+    this.productModal = new Modal(this.$refs.productModal.$refs.modal, {
+      keyboard: false,
+      backdrop: 'static',
+    });
+    this.notifyModal = new Modal(this.$refs.notifyModal.$refs.modal);
   },
   methods: {
     getProducts(page = 1) {
@@ -106,6 +132,31 @@ export default {
         })
         .catch((err) => {
           console.dir(err);
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
+    showProductModal(productId) {
+      this.product = this.products.find((x) => x.id === productId);
+      this.productModal.show();
+    },
+    addProduct({ productId, quantity }) {
+      this.productModal.hide();
+      this.title = '購物車';
+      const loader = this.$loading.show();
+      customer
+        .addProduct(productId, quantity)
+        .then((res) => {
+          const { success, message } = res.data;
+          this.success = success;
+          this.message = message;
+          this.notifyModal.show();
+        })
+        .catch(() => {
+          this.success = false;
+          this.message = '加入購物車失敗';
+          this.notifyModal.show();
         })
         .finally(() => {
           loader.hide();

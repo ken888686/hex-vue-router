@@ -51,20 +51,34 @@
       </div>
     </div>
   </div>
+  <NotifyModal
+    ref="modal"
+    :prop-title="title"
+    :prop-msg="message"
+    :prop-success="success"
+  />
 </template>
 <script>
+import { Modal } from 'bootstrap';
 import { customer } from '@/service';
+import NotifyModal from '@/components/NotifyModal.vue';
 
 export default {
+  components: { NotifyModal },
   data() {
     return {
       carts: [],
       total: 0,
       final_total: 0,
+      notifyModal: null,
+      success: false,
+      message: '',
+      title: '',
     };
   },
   mounted() {
     this.getCart();
+    this.notifyModal = new Modal(this.$refs.modal.$el);
   },
   methods: {
     getCart() {
@@ -83,16 +97,18 @@ export default {
         });
     },
     removeProduct(productId) {
-      const loader = this.$loading.show();
       customer
         .removeCart(productId)
-        .then(() => {
+        .then((res) => {
+          const { success, message } = res.data;
+          this.success = success;
+          this.message = message;
+          this.title = '移除結果';
+          this.notifyModal.show();
           this.getCart();
         })
         .catch(() => {})
-        .finally(() => {
-          loader.hide();
-        });
+        .finally(() => {});
     },
   },
 };

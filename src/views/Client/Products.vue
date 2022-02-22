@@ -66,12 +66,18 @@
         </tr>
       </tbody>
     </table>
+    <Pagination
+      :prop-pagination="pagination"
+      @set-current-page="getProducts"
+    />
   </div>
 </template>
 <script>
 import { customer } from '@/service';
+import Pagination from '@/components/Pagination.vue';
 
 export default {
+  components: { Pagination },
   data() {
     return {
       products: [],
@@ -89,10 +95,10 @@ export default {
     this.getProducts();
   },
   methods: {
-    getProducts() {
+    getProducts(page = 1) {
       const loader = this.$loading.show();
       customer
-        .getProducts()
+        .getProducts(page)
         .then((res) => {
           console.log(res.data);
           const { products, pagination } = res.data;

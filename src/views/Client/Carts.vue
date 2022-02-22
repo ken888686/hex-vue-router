@@ -48,6 +48,11 @@
             </tr>
           </tfoot>
         </table>
+
+        <OrderList
+          :prop-carts="carts"
+          @get-cart="getCart"
+        />
       </div>
     </div>
   </div>
@@ -62,9 +67,13 @@
 import { Modal } from 'bootstrap';
 import { customer } from '@/service';
 import NotifyModal from '@/components/NotifyModal.vue';
+import OrderList from '@/components/OrderList.vue';
 
 export default {
-  components: { NotifyModal },
+  components: {
+    NotifyModal,
+    OrderList,
+  },
   data() {
     return {
       carts: [],

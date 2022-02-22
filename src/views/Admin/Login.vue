@@ -93,7 +93,7 @@ export default {
     loginResult(success, message) {
       this.message = message;
       if (success) {
-        this.$router.push('/');
+        this.$router.push('/admin');
       } else {
         this.password = '';
       }

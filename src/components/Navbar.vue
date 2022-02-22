@@ -27,42 +27,83 @@
         id="navbarSupportedContent"
         class="collapse navbar-collapse"
       >
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul
+          v-if="$route.path.includes('admin')"
+          class="navbar-nav me-auto mb-2 mb-lg-0"
+        >
+          <!-- Admin -->
           <li class="nav-item">
             <router-link
               class="nav-link"
-              aria-current="page"
+              to="/admin"
+            >
+              首頁
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              to="/admin/products"
+            >
+              商品列表
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              to="/admin/orders"
+            >
+              訂單列表
+            </router-link>
+          </li>
+        </ul>
+        <ul
+          v-else
+          class="navbar-nav me-auto mb-2 mb-lg-0"
+        >
+          <!-- Client -->
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
               to="/"
             >
               首頁
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              to="/products"
+            >
+              產品列表
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              to="/carts"
+            >
+              購物車
+            </router-link>
+          </li>
         </ul>
       </div>
-      <!-- <router-link
-        v-if="$route.path === '/'"
-        type="button"
-        class="btn btn-outline-secondary me-1"
-        to="/admin"
-      >
-        進入後台
-      </router-link> -->
-      <button
-        v-if="$route.path === '/'"
-        type="button"
-        class="btn btn-outline-secondary me-1"
-        @click="checkLogin"
-      >
-        進入後台
-      </button>
       <router-link
-        v-else
+        v-if="$route.path.includes('admin')"
         type="button"
         class="btn btn-outline-secondary me-1"
         to="/"
       >
         進入前台
       </router-link>
+      <button
+        v-else
+        type="button"
+        class="btn btn-outline-secondary me-1"
+        @click="checkLogin"
+      >
+        進入後台
+      </button>
       <router-link
         v-if="!isLogin"
         to="/admin/login"

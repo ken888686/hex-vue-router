@@ -65,7 +65,7 @@
       </router-link>
       <router-link
         v-if="!isLogin"
-        to="/login"
+        to="/admin/login"
         type="button"
         class="btn btn-primary"
       >
@@ -159,7 +159,7 @@ export default {
           }
         })
         .catch(() => {
-          router.push('/');
+          router.push('/admin/login');
         })
         .finally(() => {
           loader.hide();

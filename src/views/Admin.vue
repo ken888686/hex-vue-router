@@ -1,14 +1,3 @@
 <template>
-  <div>
-    {{ title }}
-  </div>
+  <router-view />
 </template>
-<script>
-export default {
-  data() {
-    return {
-      title: 'Admin',
-    };
-  },
-};
-</script>

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <h1 class="container text-center">
     {{ title }}
-  </div>
+  </h1>
 </template>
 <script>
 export default {
@@ -9,6 +9,9 @@ export default {
     return {
       title: 'Admin',
     };
+  },
+  mounted() {
+    this.title = 'Admin Logged In';
   },
 };
 </script>

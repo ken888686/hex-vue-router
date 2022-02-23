@@ -160,6 +160,37 @@ const admin = {
         });
     });
   },
+
+  /**
+   * 取得訂單
+   * @param {Number} page 頁數
+   * @returns Promise
+   */
+  getOrders(page = 1) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${url}/v2/api/${apiPath}/admin/orders?page=${page}`, config)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  updateOrder(id, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`${url}/v2/api/${apiPath}/admin/order/${id}`, { data }, config)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
 };
 
 /**
@@ -294,6 +325,11 @@ const customer = {
         });
     });
   },
+  /**
+   * 送出訂單
+   * @param {Object} data 訂單資訊
+   * @returns Promise
+   */
   submitOrder(data) {
     return new Promise((resolve, reject) => {
       axios
